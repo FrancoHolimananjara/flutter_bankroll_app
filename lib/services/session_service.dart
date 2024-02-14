@@ -1,5 +1,3 @@
-import 'package:http/http.dart' as http;
-
 class Session {
   final DateTime start;
   final DateTime end;
@@ -25,15 +23,15 @@ class Session {
   }
 }
 
-class SessionService {
-  Future<List<Session>> getSession() async {
-    final response = await http.get(
-      Uri.parse("http://localhost:3001/api/session"),
-      headers: {
-        'Content-Type': 'application-json',
-        'Authorization': "",
-      },
-    );
-    print(response.statusCode);
-  }
-}
+// class SessionService {
+//   Future<List<Session>> getSession() async {
+//     final response = await http.get(
+//       Uri.parse("http://localhost:3001/api/session"),
+//       headers: {
+//         'Content-Type': 'application-json',
+//         'Authorization': "",
+//       },
+//     );
+//     print(response.statusCode);
+//   }
+// }

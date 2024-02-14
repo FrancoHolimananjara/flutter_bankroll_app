@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -7,7 +9,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Column(
           children: [
             Row(
@@ -69,22 +71,19 @@ class HomeScreen extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.width / 2,
               decoration: BoxDecoration(
-                color: Colors.green[300],
-                // gradient: LinearGradient(
-                //   colors: [
-                //     Theme.of(context).colorScheme.primary,
-                //     Theme.of(context).colorScheme.secondary,
-                //     Theme.of(context).colorScheme.tertiary,
-                //     Theme.of(context).colorScheme.primary,
-                //   ],
-                //   transform: const GradientRotation(pi / 4),
-                // ),
-                borderRadius: BorderRadius.circular(25),
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFF13374D),
+                    Color(0xFF406882),
+                  ],
+                  transform: GradientRotation(pi / 4),
+                ),
+                borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
                     blurRadius: 4,
                     color: Colors.grey.shade500,
-                    offset: const Offset(0, 5),
+                    offset: const Offset(0, 2),
                   )
                 ],
               ),
