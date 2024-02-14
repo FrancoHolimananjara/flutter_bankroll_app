@@ -1,4 +1,4 @@
-import 'package:bankroll_app/utils/navigation_menu.dart';
+import 'package:bankroll_app/screens/authentication/login/login_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(useMaterial3: true, fontFamily: "Biennale"),
-      home: NavigationMenu(),
+      home: LoginScreen(),
     );
   }
 }
