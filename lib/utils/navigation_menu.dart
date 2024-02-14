@@ -1,4 +1,5 @@
 import 'package:bankroll_app/screens/Home/home_screen.dart';
+import 'package:bankroll_app/screens/Session/session_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -23,6 +24,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
         elevation: 0,
         selectedIndex: _selectedIndex,
         onDestinationSelected: _onDestinationSelected,
+        indicatorColor: const Color(0xFFADCBD7),
         destinations: const [
           NavigationDestination(icon: Icon(Iconsax.home), label: 'Accueil'),
           NavigationDestination(
@@ -35,7 +37,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
         index: _selectedIndex,
         children: [
           const HomeScreen(),
-          Container(color: Colors.red),
+          const SessionScreen(),
           Container(color: Colors.blue),
           Container(color: Colors.green),
         ],

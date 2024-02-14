@@ -1,4 +1,4 @@
-import 'package:bankroll_app/screens/authentication/register/register_screen.dart';
+import 'package:bankroll_app/utils/navigation_menu.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,8 +14,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(useMaterial3: true, fontFamily: "Biennale"),
-      home: RegisterScreen(),
+      theme: ThemeData(
+          useMaterial3: true,
+          fontFamily: "Biennale",
+          colorScheme: const ColorScheme.light(
+            primary: Color(0xFF1A374D),
+            secondary: Color(0xFF406882),
+            tertiary: Color(0xFF6998AB),
+          )),
+      home: NavigationMenu(),
     );
   }
 }
