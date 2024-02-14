@@ -9,14 +9,14 @@ class SessionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
+    return SafeArea(
       child: Scaffold(
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 "Session",
                 style: TextStyle(
                   fontSize: 30,
@@ -31,7 +31,8 @@ class SessionScreen extends StatelessWidget {
                     children: [
                       TabBar(
                         dividerColor: Colors.transparent,
-                        tabs: [
+                        labelColor: Theme.of(context).colorScheme.primary,
+                        tabs: const [
                           Tab(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,

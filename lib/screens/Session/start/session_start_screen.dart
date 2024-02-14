@@ -1,27 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
-class SessionStartScreen extends StatelessWidget {
+class SessionStartScreen extends StatefulWidget {
   const SessionStartScreen({super.key});
 
   @override
+  _SessionStartScreenState createState() => _SessionStartScreenState();
+}
+
+class _SessionStartScreenState extends State<SessionStartScreen> {
+  DateTime _selectedDateTime = DateTime.now();
+
+  Future<void> _selectDateTime(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _selectedDateTime,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (pickedDate != null) {
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(_selectedDateTime),
+      );
+      if (pickedTime != null) {
+        setState(() {
+          _selectedDateTime = DateTime(
+            pickedDate.year,
+            pickedDate.month,
+            pickedDate.day,
+            pickedTime.hour,
+            pickedTime.minute,
+          );
+        });
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          Iconsax.programming_arrow,
-          size: 50,
-          color: Theme.of(context).colorScheme.tertiary,
+    return const SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.only(top: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Ajouter un nouvel session",
+            ),
+            SizedBox(
+              height: 16,
+            ),
+          ],
         ),
-        const SizedBox(
-          height: 8.0,
-        ),
-        Text(
-          "Appuyer pour ajouter et lancer un nouvel session",
-          style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
-        )
-      ],
+      ),
     );
   }
 }
