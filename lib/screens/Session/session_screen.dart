@@ -1,5 +1,6 @@
 import 'package:bankroll_app/screens/Session/done/session_done_screen.dart';
 import 'package:bankroll_app/screens/Session/inprogress/session_inprogress_screen.dart';
+import 'package:bankroll_app/screens/Session/start/session_start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -18,13 +19,14 @@ class SessionScreen extends StatelessWidget {
               Text(
                 "Session",
                 style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1A374D)),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1A374D),
+                ),
               ),
               Expanded(
                 child: DefaultTabController(
-                  length: 2,
+                  length: 3,
                   child: Column(
                     children: [
                       TabBar(
@@ -32,11 +34,14 @@ class SessionScreen extends StatelessWidget {
                         tabs: [
                           Tab(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Iconsax.book),
+                                Icon(Iconsax.add_circle),
+                                SizedBox(
+                                  width: 8,
+                                ),
                                 Text(
-                                  "Achevés",
+                                  "Nouvel",
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ],
@@ -44,23 +49,42 @@ class SessionScreen extends StatelessWidget {
                           ),
                           Tab(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(Iconsax.clock),
+                                SizedBox(
+                                  width: 8,
+                                ),
                                 Text(
                                   "En cours",
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ],
                             ),
-                          )
+                          ),
+                          Tab(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Iconsax.main_component),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  "Achevés",
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                       Expanded(
                         child: TabBarView(
                           children: [
-                            SessionDoneScreen(),
+                            SessionStartScreen(),
                             SessionInProgressScreen(),
+                            SessionDoneScreen(),
                           ],
                         ),
                       ),
