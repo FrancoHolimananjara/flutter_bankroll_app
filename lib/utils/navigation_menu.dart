@@ -1,47 +1,45 @@
 import 'package:bankroll_app/screens/Home/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-class NavigationMenu extends StatelessWidget {
-  const NavigationMenu({super.key});
+class NavigationMenu extends StatefulWidget {
+  @override
+  _NavigationMenuState createState() => _NavigationMenuState();
+}
+
+class _NavigationMenuState extends State<NavigationMenu> {
+  int _selectedIndex = 0;
+
+  void _onDestinationSelected(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NavigationController());
     return Scaffold(
-      bottomNavigationBar: Obx(
-        () => NavigationBar(
-            elevation: 0,
-            selectedIndex: controller.selectedIndex.value,
-            onDestinationSelected: (index) =>
-                controller.selectedIndex.value = index,
-            destinations: const [
-              NavigationDestination(icon: Icon(Iconsax.home), label: 'Accueil'),
-              NavigationDestination(
-                  icon: Icon(Iconsax.calendar_2), label: 'Sessions'),
-              NavigationDestination(
-                  icon: Icon(Iconsax.chart_3), label: 'Stats'),
-              NavigationDestination(icon: Icon(Iconsax.user), label: 'Profile'),
-            ]),
+      bottomNavigationBar: NavigationBar(
+        elevation: 0,
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: _onDestinationSelected,
+        destinations: const [
+          NavigationDestination(icon: Icon(Iconsax.home), label: 'Accueil'),
+          NavigationDestination(
+              icon: Icon(Iconsax.calendar_2), label: 'Sessions'),
+          NavigationDestination(icon: Icon(Iconsax.chart_3), label: 'Stats'),
+          NavigationDestination(icon: Icon(Iconsax.user), label: 'Profile'),
+        ],
       ),
-      body: Obx(() => controller.screens[controller.selectedIndex.value]),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: [
+          const HomeScreen(),
+          Container(color: Colors.red),
+          Container(color: Colors.blue),
+          Container(color: Colors.green),
+        ],
+      ),
     );
   }
-}
-
-class NavigationController extends GetxController {
-  final Rx<int> selectedIndex = 0.obs;
-  final screens = [
-    const HomeScreen(),
-    Container(
-      color: Colors.red,
-    ),
-    Container(
-      color: Colors.blue,
-    ),
-    Container(
-      color: Colors.green,
-    ),
-  ];
 }
