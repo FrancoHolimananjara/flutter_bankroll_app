@@ -1,8 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  bool showPassword = false;
+  final formData = {"username": "", "password": ""};
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  String? _validateUsername(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your email';
+    }
+    // Ajoutez d'autres validations si nécessaire, comme la validation du format d'email.
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your password';
+    }
+    // Ajoutez d'autres validations si nécessaire, comme la longueur minimale du mot de passe.
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,33 +72,47 @@ class LoginScreen extends StatelessWidget {
 
                 // Form
                 Form(
+                  key: _formKey,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 32.0),
                     child: Column(
                       children: [
                         TextFormField(
+                          controller: _usernameController,
+                          validator: _validateUsername,
                           decoration: const InputDecoration(
-                            prefixIcon: Icon(Iconsax.direct_right),
+                            prefixIcon: Icon(Iconsax.user),
                             border: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
                             focusedBorder: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
-                            labelText: 'Email',
+                            labelText: 'Username',
                           ),
                         ),
                         const SizedBox(
                           height: 16.0,
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(Iconsax.password_check),
-                            suffixIcon: Icon(Iconsax.eye),
-                            border: OutlineInputBorder(
+                          controller: _passwordController,
+                          obscureText: showPassword,
+                          validator: _validatePassword,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Iconsax.password_check),
+                            suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    showPassword = !showPassword;
+                                  });
+                                },
+                                icon: Icon(showPassword
+                                    ? Iconsax.eye
+                                    : Iconsax.eye_slash)),
+                            border: const OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
-                            focusedBorder: OutlineInputBorder(
+                            focusedBorder: const OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
                             labelText: "Password",
@@ -90,19 +139,32 @@ class LoginScreen extends StatelessWidget {
                         ),
 
                         // Signin Button
-                        Container(
-                          width: double.infinity,
-                          height: MediaQuery.of(context).size.width / 7,
-                          decoration: BoxDecoration(
-                              color: const Color(0xFF1A374D),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: const Center(
-                            child: Text(
-                              "Sign In",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                        GestureDetector(
+                          onTap: () {
+                            if (_formKey.currentState!.validate()) {
+                              // Les validations sont passées
+                              // Vous pouvez soumettre le formulaire ici.
+                              setState(() {
+                                formData['username'] = _usernameController.text;
+                                formData['password'] = _passwordController.text;
+                              });
+                              print(formData);
+                            }
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            height: MediaQuery.of(context).size.width / 7,
+                            decoration: BoxDecoration(
+                                color: const Color(0xFF1A374D),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: const Center(
+                              child: Text(
+                                "Sign In",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
                           ),
