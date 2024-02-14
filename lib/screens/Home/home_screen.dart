@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -29,7 +30,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                         Icon(
-                          Icons.person_2,
+                          Iconsax.user,
                           color: Theme.of(context).colorScheme.background,
                         ),
                       ],
@@ -60,7 +61,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.settings),
+                  icon: const Icon(Iconsax.setting),
                 ),
               ],
             ),

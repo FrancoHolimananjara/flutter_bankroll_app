@@ -1,4 +1,5 @@
 import 'package:bankroll_app/screens/Home/home_screen.dart';
+import 'package:bankroll_app/screens/Profile/profile_screen.dart';
 import 'package:bankroll_app/screens/Session/session_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -38,8 +39,8 @@ class _NavigationMenuState extends State<NavigationMenu> {
         children: [
           const HomeScreen(),
           const SessionScreen(),
-          Container(color: Colors.blue),
           Container(color: Colors.green),
+          const ProfileScreen(),
         ],
       ),
     );
