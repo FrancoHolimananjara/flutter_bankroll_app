@@ -24,11 +24,12 @@ class Session {
 
   factory Session.fromJson(Map<String, dynamic> json) {
     return Session(
-        start: json['start'],
-        end: json['end'],
-        buyin: json['buyin'],
-        buyout: json['buyout'],
-        place: json['place']);
+      start: json['start'],
+      end: json['end'],
+      buyin: json['buyin'],
+      buyout: json['buyout'],
+      place: json['place'],
+    );
   }
 }
 
@@ -61,5 +62,33 @@ class SessionService {
       // ignore: use_build_context_synchronously
       showSnackBar(context, false, e.toString());
     }
+  }
+
+  Future<List<Session>> getSession() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var token = prefs.getString("access-token");
+      http.Response res = await http.get(
+        Uri.parse('${Constant.uri}/session'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+
+        late List<Session> sessionList = [];
+
+        for (var i = 0; i < data['sessions'].length; i++) {
+          final entry = data['sessions'][i];
+          sessionList.add(Session.fromJson(entry));
+          print(entry);
+        }
+        print(List.from(data['sessions']));
+        return List.from(data['sessions']);
+      }
+    } catch (e) {}
+    return [];
   }
 }
