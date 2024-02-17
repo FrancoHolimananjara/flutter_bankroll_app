@@ -1,3 +1,4 @@
+import 'package:bankroll_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -13,6 +14,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  final AuthService _authService = AuthService();
 
   bool showPassword = false;
   final Map<String, dynamic> formData = {
@@ -53,6 +56,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return null;
   }
 
+  void onRegister() {
+    _authService.register(context: context, formData: formData);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,6 +93,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 // Form
                 Form(
+                  key: _formKey,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 32.0),
                     child: Column(
@@ -164,6 +172,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 formData['password'] = _passwordController.text;
                               });
                               print(formData);
+                              onRegister();
                             }
                           },
                           child: Container(

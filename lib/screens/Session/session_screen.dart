@@ -80,7 +80,7 @@ class SessionScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Expanded(
+                      const Expanded(
                         child: TabBarView(
                           children: [
                             SessionStartScreen(),

@@ -1,8 +1,13 @@
-import 'package:bankroll_app/utils/navigation_menu.dart';
+import 'package:bankroll_app/providers/user_provider.dart';
+import 'package:bankroll_app/screens/authentication/register/register_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [ChangeNotifierProvider(create: (context) => UserProvider())],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -22,7 +27,7 @@ class MyApp extends StatelessWidget {
             secondary: Color(0xFF406882),
             tertiary: Color(0xFF6998AB),
           )),
-      home: NavigationMenu(),
+      home: RegisterScreen(),
     );
   }
 }
