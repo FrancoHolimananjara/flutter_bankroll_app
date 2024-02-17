@@ -1,3 +1,4 @@
+import 'package:bankroll_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -12,6 +13,8 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  final AuthService _authService = AuthService();
 
   bool showPassword = false;
   final formData = {"username": "", "password": ""};
@@ -37,6 +40,10 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     // Ajoutez d'autres validations si nécessaire, comme la longueur minimale du mot de passe.
     return null;
+  }
+
+  void onSignIn() {
+    _authService.login(context: context, formData: formData);
   }
 
   @override
@@ -149,6 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 formData['password'] = _passwordController.text;
                               });
                               print(formData);
+                              onSignIn();
                             }
                           },
                           child: Container(

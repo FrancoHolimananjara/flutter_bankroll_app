@@ -1,11 +1,14 @@
+import 'package:bankroll_app/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -47,9 +50,9 @@ class ProfileScreen extends StatelessWidget {
                                 color: Colors.grey.shade600,
                                 fontWeight: FontWeight.w600),
                           ),
-                          const Text(
-                            "Franco",
-                            style: TextStyle(
+                          Text(
+                            user.username,
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),

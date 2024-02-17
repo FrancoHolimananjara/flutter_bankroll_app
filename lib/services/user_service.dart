@@ -4,8 +4,8 @@ class User {
   final String username;
   final String email;
   final String password;
-  final List<String> ofsessions;
-  final List<String> oftransactions;
+  final List<dynamic> ofsessions;
+  final List<dynamic> oftransactions;
   final String ofbaknroll;
 
   const User({
@@ -28,7 +28,7 @@ class User {
       password: json['password'],
       ofsessions: json['ofsessions'],
       oftransactions: json['oftransactions'],
-      ofbaknroll: json['ofbaknroll'],
+      ofbaknroll: json['ofbaknroll'] ?? "",
     );
   }
 }

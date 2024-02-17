@@ -1,5 +1,5 @@
 import 'package:bankroll_app/providers/user_provider.dart';
-import 'package:bankroll_app/screens/authentication/register/register_screen.dart';
+import 'package:bankroll_app/screens/authentication/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
             secondary: Color(0xFF406882),
             tertiary: Color(0xFF6998AB),
           )),
-      home: RegisterScreen(),
+      home: LoginScreen(),
     );
   }
 }

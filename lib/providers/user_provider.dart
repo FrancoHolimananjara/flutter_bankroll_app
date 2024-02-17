@@ -13,7 +13,8 @@ class UserProvider extends ChangeNotifier {
       ofbaknroll: '');
 
   User get user => _user;
-  void setUser(Map<String, dynamic> user) {
+
+  void setUser(dynamic user) {
     _user = User.fromJson(user);
     notifyListeners();
   }
