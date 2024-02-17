@@ -8,21 +8,6 @@ void httpErrorHandler({
   required http.Response response,
   required BuildContext context,
 }) {
-  switch (response.statusCode) {
-    case 200:
-      showSnackBar(context, jsonDecode(response.body)['success'],
-          jsonDecode(response.body)['message']);
-      break;
-    case 400:
-      showSnackBar(context, jsonDecode(response.body)['success'],
-          jsonDecode(response.body)['message']);
-      break;
-    case 500:
-      showSnackBar(context, jsonDecode(response.body)['success'],
-          jsonDecode(response.body)['message']);
-      break;
-    default:
-      showSnackBar(
-          context, jsonDecode(response.body)['success'], response.body);
-  }
+  showSnackBar(context, jsonDecode(response.body)['success'],
+      jsonDecode(response.body)['message']);
 }
