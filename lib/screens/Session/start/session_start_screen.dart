@@ -1,3 +1,4 @@
+import 'package:bankroll_app/services/session_service.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -13,6 +14,8 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
   TextEditingController _buyoutController = TextEditingController();
   TextEditingController _placeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  SessionService _sessionService = SessionService();
 
   DateTime _selectedStartDateTime = DateTime.now();
   DateTime _selectedEndDateTime = DateTime.now();
@@ -130,6 +133,10 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
     return null;
   }
 
+  void onAddNewSession() {
+    _sessionService.addNewSession(context: context, formData: formData);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -159,9 +166,9 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                             : Theme.of(context).colorScheme.primary,
                       ),
                     ),
-                    child: const Text(
-                      'Mettre en cours',
-                      style: TextStyle(
+                    child: Text(
+                      _inprogressSession ? "En cours" : "Mettre en cours ?",
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                       ),
@@ -172,23 +179,28 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
               const SizedBox(
                 height: 16.0,
               ),
-              TextFormField(
-                readOnly: true,
-                decoration: InputDecoration(
-                  prefixIcon: IconButton(
-                    onPressed: () => _selectDateTimeStart(
-                        context), // Set onPressed to null if _inprogressSession is false
-                    icon: Icon(myDate['start'] != null
-                        ? Iconsax.edit_2
-                        : Iconsax.calendar_add),
-                  ),
-                  border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  focusedBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  labelText: "${myDate['start'] ?? "Choisir la date de début"}",
-                ),
-              ),
+              !_inprogressSession
+                  ? TextFormField(
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        prefixIcon: IconButton(
+                          onPressed: () => _selectDateTimeStart(
+                              context), // Set onPressed to null if _inprogressSession is false
+                          icon: Icon(myDate['start'] != null
+                              ? Iconsax.edit_2
+                              : Iconsax.calendar_add),
+                        ),
+                        border: const OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        focusedBorder: const OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        labelText:
+                            "${myDate['start'] ?? "Choisir la date de début"}",
+                      ),
+                    )
+                  : Container(),
               const SizedBox(
                 height: 16,
               ),
@@ -272,9 +284,11 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                     // Les validations sont passées
                     // Vous pouvez soumettre le formulaire ici.
                     setState(() {
-                      formData['start'] = myDate['start'];
+                      formData['start'] = _inprogressSession
+                          ? DateTime.now().toString()
+                          : myDate['start'].toString();
                       formData['end'] =
-                          !_inprogressSession ? myDate['end'] : myDate['start'];
+                          _inprogressSession ? null : myDate['end'].toString();
                       formData['inprogress'] = _inprogressSession;
                       formData['buyin'] = int.parse(_buyinController.text);
                       formData['buyout'] = !_inprogressSession
@@ -283,6 +297,7 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                       formData['place'] = _placeController.text;
                     });
                     print(formData);
+                    onAddNewSession();
                   }
                 },
                 child: Container(

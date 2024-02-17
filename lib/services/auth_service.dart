@@ -16,7 +16,7 @@ class AuthService {
       required Map<String, dynamic> formData}) async {
     try {
       http.Response res = await http.post(
-        Uri.parse("${Constant.uri}/api/auth/register"),
+        Uri.parse("${Constant.uri}/auth/register"),
         body: jsonEncode(formData),
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ class AuthService {
       var userProvider = Provider.of<UserProvider>(context, listen: false);
       final navigator = Navigator.of(context);
       http.Response res = await http.post(
-        Uri.parse("${Constant.uri}/api/auth/login"),
+        Uri.parse("${Constant.uri}/auth/login"),
         body: jsonEncode(formData),
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -51,19 +51,20 @@ class AuthService {
       );
       // ignore: use_build_context_synchronously
       httpErrorHandler(
-          response: res,
-          context: context,
-          onSuccess: () async {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            userProvider.setUser(jsonDecode(res.body));
-            await prefs.setString(
-              "access-token",
-              jsonDecode(res.body)['token'],
-            );
-            navigator.pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => NavigationMenu()),
-                (route) => false);
-          });
+        response: res,
+        context: context,
+        onSuccess: () async {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          userProvider.setUser(jsonDecode(res.body));
+          await prefs.setString(
+            "access-token",
+            jsonDecode(res.body)['token'],
+          );
+          navigator.pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => NavigationMenu()),
+              (route) => false);
+        },
+      );
     } catch (e) {
       // ignore: use_build_context_synchronously
       showSnackBar(context, false, e.toString());
