@@ -67,21 +67,28 @@ class SessionService {
   Future<List<Session>> getSession() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("access-token");
-    http.Response res = await http.get(
-      Uri.parse('${Constant.uri}/session'),
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
-    if (res.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(res.body)['sessions'];
-      final List<Session> sessionList = data.map((session) {
-        return Session.fromJson(session);
-      }).toList();
-      return sessionList;
-    } else {
-      throw Exception("Failed to fecth items");
+    try {
+      http.Response res = await http.get(
+        Uri.parse('${Constant.uri}/session'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      if (res.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(res.body)['sessions'];
+        final List<Session> sessionList = data.map((session) {
+          return Session.fromJson(session);
+        }).toList();
+        return sessionList;
+      } else if (res.statusCode == 404) {
+        // Si aucun élément n'est trouvé, retourner une liste vide
+        return [];
+      } else {
+        throw Exception("Failed on fetching: ${res.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Failed on fetching: $e");
     }
   }
 }
