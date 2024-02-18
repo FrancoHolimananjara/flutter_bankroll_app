@@ -24,10 +24,10 @@ class _SessionInProgressScreenState extends State<SessionInProgressScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Session>>(
-      future: _sessionService.getSession(),
+      future: _futureSession,
       builder: (context, AsyncSnapshot<List<Session>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
