@@ -44,6 +44,7 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
       lastDate: DateTime(2101),
     );
     if (pickedDate != null) {
+      // ignore: use_build_context_synchronously
       final TimeOfDay? pickedTime = await showTimePicker(
         context: context,
         initialTime: TimeOfDay.fromDateTime(_selectedStartDateTime),
