@@ -5,17 +5,17 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Bankroll {
-  final String typeOfGame;
+  final String typeOfgame;
   final int bank;
 
   const Bankroll({
-    required this.typeOfGame,
+    required this.typeOfgame,
     required this.bank,
   });
 
   factory Bankroll.fromJson(Map<String, dynamic> json) {
     return Bankroll(
-      typeOfGame: json['typeOfGame'],
+      typeOfgame: json['typeOfgame'],
       bank: json['bank'] ?? 0,
     );
   }
@@ -34,8 +34,8 @@ class BankrollService {
         },
       );
       if (res.statusCode == 200) {
-        final Bankroll data = jsonDecode(res.body)['bankroll'];
-        print(data);
+        final Bankroll data =
+            Bankroll.fromJson(jsonDecode(res.body)['bankroll']);
         return data;
       } else {
         throw Exception("Failed on fetching: ${res.statusCode}");

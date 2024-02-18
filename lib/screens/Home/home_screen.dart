@@ -1,10 +1,26 @@
 import 'dart:math';
 
+import 'package:bankroll_app/services/bank_service.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final BankrollService _bankrollService = BankrollService();
+  late Future<Bankroll> _bankroll;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _bankroll = _bankrollService.getBankroll();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,14 +114,33 @@ class HomeScreen extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  const Text(
-                    "\$ 500.00",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 40,
-                      color: Colors.white,
-                    ),
-                  ),
+                  FutureBuilder<Bankroll>(
+                      future: _bankroll,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              "Error ${snapshot.error.toString()}",
+                              style: TextStyle(color: Colors.red[400]),
+                            ),
+                          );
+                        } else {
+                          final data = snapshot.data;
+                          return Text(
+                            '${data?.bank} Ar',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 40,
+                              color: Colors.white,
+                            ),
+                          );
+                        }
+                      }),
                   const SizedBox(
                     height: 20,
                   ),
