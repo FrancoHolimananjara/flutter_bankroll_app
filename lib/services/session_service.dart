@@ -64,12 +64,12 @@ class SessionService {
     }
   }
 
-  Future<List<Session>> getSession() async {
+  Future<List<Session>> getSession(bool inprogress) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("access-token");
     try {
       http.Response res = await http.get(
-        Uri.parse('${Constant.uri}/session'),
+        Uri.parse('${Constant.uri}/session?inprogress=$inprogress'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',

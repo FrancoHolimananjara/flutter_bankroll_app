@@ -18,7 +18,7 @@ class _SessionInProgressScreenState extends State<SessionInProgressScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _futureSession = _sessionService.getSession();
+    _futureSession = _sessionService.getSession(true);
   }
 
   @override
