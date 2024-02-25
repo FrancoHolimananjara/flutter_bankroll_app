@@ -10,6 +10,8 @@ class SessionStartScreen extends StatefulWidget {
 }
 
 class _SessionStartScreenState extends State<SessionStartScreen> {
+  TextEditingController _startDateController = TextEditingController();
+  TextEditingController _endDateController = TextEditingController();
   TextEditingController _buyinController = TextEditingController();
   TextEditingController _buyoutController = TextEditingController();
   TextEditingController _placeController = TextEditingController();
@@ -27,14 +29,7 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
     "end": null,
   };
 
-  final Map<String, dynamic> formData = {
-    // "start": null,
-    // "end": null,
-    // "inprogress": false,
-    // "buyin": 0,
-    // "buyout": 0,
-    // "place": null,
-  };
+  final Map<String, dynamic> formData = {};
 
   Future<void> _selectDateTimeStart(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -58,6 +53,7 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
             pickedTime.hour,
             pickedTime.minute,
           );
+          _startDateController.text = _selectedStartDateTime.toString();
         });
         myDate['start'] = _selectedStartDateTime;
       }
@@ -85,6 +81,7 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
             pickedTime.hour,
             pickedTime.minute,
           );
+          _endDateController.text = _selectedEndDateTime.toString();
         });
 
         if (!_inprogressSession) {
@@ -183,6 +180,7 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
               !_inprogressSession
                   ? TextFormField(
                       readOnly: true,
+                      controller: _startDateController,
                       decoration: InputDecoration(
                         prefixIcon: IconButton(
                           onPressed: () => _selectDateTimeStart(
@@ -197,8 +195,7 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                         focusedBorder: const OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(10))),
-                        labelText:
-                            "${myDate['start'] ?? "Choisir la date de début"}",
+                        labelText: "Choisir la date de début",
                       ),
                     )
                   : Container(),
@@ -208,6 +205,7 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
               !_inprogressSession
                   ? TextFormField(
                       readOnly: true,
+                      controller: _endDateController,
                       decoration: InputDecoration(
                         prefixIcon: IconButton(
                           onPressed: () => _selectDateTimeEnd(
@@ -222,8 +220,7 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                         focusedBorder: const OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(10))),
-                        labelText:
-                            "${myDate['end'] ?? "Choisir la date du fin"}",
+                        labelText: "Choisir la date du fin",
                       ),
                     )
                   : Container(),
