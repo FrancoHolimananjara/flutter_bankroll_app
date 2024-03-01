@@ -57,22 +57,29 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
                 // Logo, Title and Subtitle
-                const Column(
+                Column(
                   children: [
                     Icon(
                       Iconsax.airdrop,
                       size: 100,
+                      color: Theme.of(context).colorScheme.inversePrimary,
                     ),
                     Text(
                       "Welcome back,",
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 8.0,
                     ),
                     Text(
                       "Discover your bankroll evolution by game.",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
                     )
                   ],
                 ),
@@ -87,12 +94,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         TextFormField(
                           controller: _usernameController,
                           validator: _validateUsername,
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(Iconsax.user),
-                            border: OutlineInputBorder(
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Iconsax.user),
+                            border: const OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
                             focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
                             labelText: 'Username',
@@ -119,14 +129,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             border: const OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
-                            focusedBorder: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(10))),
                             labelText: "Password",
                           ),
                         ),
                         const SizedBox(
-                          height: 8.0,
+                          height: 5.0,
                         ),
 
                         // Forgot password
@@ -135,14 +148,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             TextButton(
                                 onPressed: () {},
-                                child: const Text(
+                                child: Text(
                                   "Forgot password ?",
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
                                 )),
                           ],
                         ),
 
                         const SizedBox(
-                          height: 32,
+                          height: 16,
                         ),
 
                         // Signin Button
@@ -163,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             width: double.infinity,
                             height: MediaQuery.of(context).size.width / 7,
                             decoration: BoxDecoration(
-                                color: const Color(0xFF1A374D),
+                                color: const Color(0xFF642CFF),
                                 borderRadius: BorderRadius.circular(10)),
                             child: const Center(
                               child: Text(
@@ -186,13 +203,17 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: double.infinity,
                           height: MediaQuery.of(context).size.width / 7,
                           decoration: BoxDecoration(
-                              border: Border.all(width: 1),
+                              border: Border.all(
+                                  width: 1,
+                                  color: Theme.of(context).colorScheme.primary),
                               borderRadius: BorderRadius.circular(10)),
-                          child: const Center(
+                          child: Center(
                             child: Text(
                               "Create Account",
                               style: TextStyle(
-                                color: Color(0xFF1A374D),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),

@@ -16,13 +16,16 @@ class SessionScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Session",
+              Text(
+                "Mes séssions",
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1A374D),
+                  color: Theme.of(context).colorScheme.inversePrimary,
                 ),
+              ),
+              const SizedBox(
+                height: 16,
               ),
               Expanded(
                 child: DefaultTabController(
@@ -30,16 +33,26 @@ class SessionScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       TabBar(
-                        dividerColor: Colors.transparent,
-                        labelColor: Theme.of(context).colorScheme.primary,
+                        indicator: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary,
+                              width: 3,
+                            ),
+                          ),
+                        ),
+                        dividerColor: Theme.of(context).colorScheme.background,
+                        labelColor:
+                            Theme.of(context).colorScheme.inversePrimary,
                         tabs: const [
                           Tab(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Icon(Iconsax.add_circle),
                                 SizedBox(
-                                  width: 8,
+                                  width: 5,
                                 ),
                                 Text(
                                   "Nouvel",
@@ -50,11 +63,11 @@ class SessionScreen extends StatelessWidget {
                           ),
                           Tab(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Icon(Iconsax.clock),
                                 SizedBox(
-                                  width: 8,
+                                  width: 5,
                                 ),
                                 Text(
                                   "En cours",
@@ -65,11 +78,11 @@ class SessionScreen extends StatelessWidget {
                           ),
                           Tab(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Icon(Iconsax.main_component),
                                 SizedBox(
-                                  width: 8,
+                                  width: 5,
                                 ),
                                 Text(
                                   "Achevés",

@@ -22,10 +22,11 @@ class _NavigationMenuState extends State<NavigationMenu> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: NavigationBar(
+        backgroundColor: Theme.of(context).colorScheme.background,
         elevation: 0,
         selectedIndex: _selectedIndex,
         onDestinationSelected: _onDestinationSelected,
-        indicatorColor: const Color(0xFFADCBD7),
+        indicatorColor: Theme.of(context).colorScheme.tertiary,
         destinations: const [
           NavigationDestination(icon: Icon(Iconsax.home), label: 'Accueil'),
           NavigationDestination(
