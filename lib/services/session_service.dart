@@ -7,30 +7,82 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Session {
-  final String start;
-  final String? end;
-  final int buyin;
-  final int buyout;
-  final String place;
+// class Session {
+//   final String start;
+//   final String? end;
+//   final int buyin;
+//   final int buyout;
+//   final String place;
 
-  const Session({
+//   const Session({
+//     required this.start,
+//     required this.end,
+//     required this.buyin,
+//     required this.buyout,
+//     required this.place,
+//   });
+
+//   factory Session.fromJson(Map<String, dynamic> json) {
+//     return Session(
+//       start: json['start'],
+//       end: json['end'] ?? '',
+//       buyin: json['buyin'],
+//       buyout: json['buyout'],
+//       place: json['place'],
+//     );
+//   }
+// }
+
+// To parse this JSON data, do
+//
+//     final session = sessionFromJson(jsonString);
+
+Session sessionFromJson(String str) => Session.fromJson(json.decode(str));
+
+String sessionToJson(Session data) => json.encode(data.toJson());
+
+class Session {
+  String id;
+  DateTime start;
+  DateTime end;
+  bool inprogress;
+  int buyin;
+  int buyout;
+  String place;
+  String of;
+
+  Session({
+    required this.id,
     required this.start,
     required this.end,
+    required this.inprogress,
     required this.buyin,
     required this.buyout,
     required this.place,
+    required this.of,
   });
 
-  factory Session.fromJson(Map<String, dynamic> json) {
-    return Session(
-      start: json['start'],
-      end: json['end'] ?? '',
-      buyin: json['buyin'],
-      buyout: json['buyout'],
-      place: json['place'],
-    );
-  }
+  factory Session.fromJson(Map<String, dynamic> json) => Session(
+        id: json["_id"],
+        start: DateTime.parse(json["start"]),
+        end: DateTime.parse(json["end"]),
+        inprogress: json["inprogress"],
+        buyin: json["buyin"],
+        buyout: json["buyout"],
+        place: json["place"],
+        of: json["of"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "start": start.toIso8601String(),
+        "end": end.toIso8601String(),
+        "inprogress": inprogress,
+        "buyin": buyin,
+        "buyout": buyout,
+        "place": place,
+        "of": of,
+      };
 }
 
 class SessionService {
