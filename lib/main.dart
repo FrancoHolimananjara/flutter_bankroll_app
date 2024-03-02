@@ -1,6 +1,6 @@
 import 'package:bankroll_app/providers/theme_provider.dart';
 import 'package:bankroll_app/providers/user_provider.dart';
-import 'package:bankroll_app/screens/authentication/login/login_screen.dart';
+import 'package:bankroll_app/screens/authentication/otp/otp_verification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: Provider.of<ThemeProvider>(context).themeData,
-      home: const LoginScreen(),
+      home: const OtpVerificationScreen(),
     );
   }
 }

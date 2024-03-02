@@ -1,5 +1,6 @@
 import 'package:bankroll_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -60,6 +61,89 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _authService.register(context: context, formData: formData);
   }
 
+  // void _modalBottomSheet() {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+  //     ),
+  //     builder: (context) => DraggableScrollableSheet(
+  //       expand: false,
+  //       initialChildSize: 0.4,
+  //       maxChildSize: 0.9,
+  //       minChildSize: 0.20,
+  //       builder: (context, scrollController) => SingleChildScrollView(
+  //         controller: scrollController,
+  //         child: Padding(
+  //           padding: const EdgeInsets.symmetric(horizontal: 15),
+  //           child: Column(
+  //             children: [
+  //               const SizedBox(
+  //                 height: 5,
+  //               ),
+  //               Container(
+  //                 width: 40,
+  //                 height: 4,
+  //                 decoration: const BoxDecoration(
+  //                   borderRadius: BorderRadius.all(Radius.circular(5)),
+  //                   color: Colors.grey,
+  //                 ),
+  //               ),
+  //               const SizedBox(
+  //                 height: 42,
+  //               ),
+  //               const Text(
+  //                 "OTP",
+  //                 textAlign: TextAlign.center,
+  //                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+  //               ),
+  //               const SizedBox(
+  //                 height: 16,
+  //               ),
+  //               const Text(
+  //                 "To add the geolocator to your Flutter application read the useremail@gmail.com instructions. ",
+  //                 textAlign: TextAlign.center,
+  //                 style: TextStyle(),
+  //               ),
+  //               SizedBox(
+  //                 height: 32,
+  //               ),
+  //               TextFormField(
+  //                 decoration: InputDecoration(
+  //                     border: OutlineInputBorder(), label: Text("Hello")),
+  //               ),
+  //               const SizedBox(
+  //                 height: 16,
+  //               ),
+  //               GestureDetector(
+  //                 onTap: () {},
+  //                 child: Container(
+  //                   width: double.infinity,
+  //                   height: MediaQuery.of(context).size.width / 7,
+  //                   decoration: BoxDecoration(
+  //                       color: const Color(0xFF282828),
+  //                       borderRadius: BorderRadius.circular(10)),
+  //                   child: const Center(
+  //                     child: Text(
+  //                       "Verifier",
+  //                       style: TextStyle(
+  //                         color: Colors.white,
+  //                         fontWeight: FontWeight.bold,
+  //                         fontSize: 16,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,22 +155,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               children: [
                 // Logo, Title and Subtitle
-                const Column(
+                Column(
                   children: [
-                    Icon(
-                      Iconsax.airdrop,
-                      size: 100,
+                    SvgPicture.asset("images/logo.svg"),
+                    const SizedBox(
+                      height: 16,
                     ),
-                    Text(
-                      "Welcome,",
+                    const Text(
+                      "Bienvenue,",
                       style:
                           TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 8.0,
                     ),
-                    Text(
-                      "Let's create an account for you.",
+                    const Text(
+                      "To add the geolocator to your Flutter application read the install instructions. Below are some Android and iOS specifics that are required for the geolocator to work correctly.",
+                      textAlign: TextAlign.center,
                     )
                   ],
                 ),
@@ -134,6 +219,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         TextFormField(
                           controller: _passwordController,
+                          obscureText: showPassword,
                           validator: _validatePassword,
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Iconsax.password_check),
@@ -143,7 +229,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     showPassword = !showPassword;
                                   });
                                 },
-                                icon: Icon(showPassword
+                                icon: Icon(!showPassword
                                     ? Iconsax.eye
                                     : Iconsax.eye_slash)),
                             border: const OutlineInputBorder(
@@ -179,11 +265,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             width: double.infinity,
                             height: MediaQuery.of(context).size.width / 7,
                             decoration: BoxDecoration(
-                                color: const Color(0xFF1A374D),
+                                color: const Color(0xFF282828),
                                 borderRadius: BorderRadius.circular(10)),
                             child: const Center(
                               child: Text(
-                                "Create my account",
+                                "Créer",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -198,23 +284,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
 
                         // Sign in Button
-                        Container(
-                          width: double.infinity,
-                          height: MediaQuery.of(context).size.width / 7,
-                          decoration: BoxDecoration(
-                              border: Border.all(width: 1),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: const Center(
-                            child: Text(
-                              "Sign In Now",
-                              style: TextStyle(
-                                color: Color(0xFF1A374D),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),

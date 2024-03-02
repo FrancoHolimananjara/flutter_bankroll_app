@@ -1,5 +1,6 @@
 import 'package:bankroll_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -57,176 +58,150 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
                 // Logo, Title and Subtitle
-                Column(
-                  children: [
-                    Icon(
-                      Iconsax.airdrop,
-                      size: 100,
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                    ),
-                    Text(
-                      "Welcome back,",
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8.0,
-                    ),
-                    Text(
-                      "Discover your bankroll evolution by game.",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      ),
-                    )
-                  ],
-                ),
-
+                _header(),
                 // Form
-                Form(
-                  key: _formKey,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 32.0),
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          controller: _usernameController,
-                          validator: _validateUsername,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Iconsax.user),
-                            border: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            labelText: 'Username',
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16.0,
-                        ),
-                        TextFormField(
-                          controller: _passwordController,
-                          obscureText: showPassword,
-                          validator: _validatePassword,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Iconsax.password_check),
-                            suffixIcon: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    showPassword = !showPassword;
-                                  });
-                                },
-                                icon: Icon(showPassword
-                                    ? Iconsax.eye
-                                    : Iconsax.eye_slash)),
-                            border: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(10))),
-                            labelText: "Password",
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5.0,
-                        ),
-
-                        // Forgot password
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "Forgot password ?",
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary),
-                                )),
-                          ],
-                        ),
-
-                        const SizedBox(
-                          height: 16,
-                        ),
-
-                        // Signin Button
-                        GestureDetector(
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              // Les validations sont passées
-                              // Vous pouvez soumettre le formulaire ici.
-                              setState(() {
-                                formData['username'] = _usernameController.text;
-                                formData['password'] = _passwordController.text;
-                              });
-                              print(formData);
-                              onSignIn();
-                            }
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            height: MediaQuery.of(context).size.width / 7,
-                            decoration: BoxDecoration(
-                                color: const Color(0xFF642CFF),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: const Center(
-                              child: Text(
-                                "Sign In",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16.0,
-                        ),
-
-                        // Sign up Button
-                        Container(
-                          width: double.infinity,
-                          height: MediaQuery.of(context).size.width / 7,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: 1,
-                                  color: Theme.of(context).colorScheme.primary),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Center(
-                            child: Text(
-                              "Create Account",
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .inversePrimary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                _formUi()
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _header() {
+    return Column(
+      children: [
+        SvgPicture.asset("images/logo.svg"),
+        const SizedBox(
+          height: 16,
+        ),
+        Text(
+          "De retour? Bienvenue,",
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.inversePrimary,
+          ),
+        ),
+        const SizedBox(
+          height: 8.0,
+        ),
+        Text(
+          "To add the geolocator to your Flutter application read the install instructions. Below are some Android and iOS specifics that are required for the geolocator to work correctly.",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.inversePrimary,
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _formUi() {
+    return Form(
+      key: _formKey,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 32.0),
+        child: Column(
+          children: [
+            TextFormField(
+              controller: _usernameController,
+              validator: _validateUsername,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Iconsax.user),
+                border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.primary),
+                    borderRadius: const BorderRadius.all(Radius.circular(10))),
+                labelText: 'Username',
+              ),
+            ),
+            const SizedBox(
+              height: 16.0,
+            ),
+            TextFormField(
+              controller: _passwordController,
+              obscureText: showPassword,
+              validator: _validatePassword,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Iconsax.password_check),
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        showPassword = !showPassword;
+                      });
+                    },
+                    icon:
+                        Icon(!showPassword ? Iconsax.eye : Iconsax.eye_slash)),
+                border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.primary),
+                    borderRadius: const BorderRadius.all(Radius.circular(10))),
+                labelText: "Password",
+              ),
+            ),
+            const SizedBox(
+              height: 5.0,
+            ),
+
+            // Forgot password
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      "Forgot password ?",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary),
+                    )),
+              ],
+            ),
+
+            const SizedBox(
+              height: 16,
+            ),
+
+            // Signin Button
+            GestureDetector(
+              onTap: () {
+                if (_formKey.currentState!.validate()) {
+                  // Les validations sont passées
+                  // Vous pouvez soumettre le formulaire ici.
+                  setState(() {
+                    formData['username'] = _usernameController.text;
+                    formData['password'] = _passwordController.text;
+                  });
+                  print(formData);
+                  onSignIn();
+                }
+              },
+              child: Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.width / 7,
+                decoration: BoxDecoration(
+                    color: const Color(0xFF282828),
+                    borderRadius: BorderRadius.circular(10)),
+                child: const Center(
+                  child: Text(
+                    "Se connecter",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            // Sign up Button
+          ],
         ),
       ),
     );
