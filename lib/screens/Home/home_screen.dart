@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:bankroll_app/providers/theme_provider.dart';
 import 'package:bankroll_app/providers/user_provider.dart';
 import 'package:bankroll_app/services/bank_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
@@ -26,11 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
       drawer: Drawer(
         backgroundColor: Theme.of(context).colorScheme.background,
         child: Column(
@@ -69,152 +67,162 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: Column(
             children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.width / 2,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF642CFF),
-                  borderRadius: BorderRadius.circular(15),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Hi,${user.username}",
+                        style: const TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold),
+                      ),
+                      const Text(
+                        "Bienvenue",
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      )
+                    ],
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Iconsax.setting),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Container(
+                  width: MediaQuery.of(context).size.width + 2,
+                  height: MediaQuery.of(context).size.width / 2,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(colors: [
+                      Color(0xFF282828),
+                      Color(0xFF282828),
+                      Color(0xFF282828),
+                      Color.fromARGB(255, 74, 74, 74)
+                    ], transform: GradientRotation(pi / 5)),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(top: 15, left: 12, right: 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Text(
+                          "Votre balance actuelle",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                        FutureBuilder<Bankroll>(
+                            future: _bankroll,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              } else if (snapshot.hasError) {
+                                return Center(
+                                  child: Text(
+                                    "Error ${snapshot.error.toString()}",
+                                    style: TextStyle(color: Colors.red[400]),
+                                  ),
+                                );
+                              } else {
+                                final data = snapshot.data;
+                                return Text(
+                                  '${data?.bank} Ar',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 40,
+                                    color: Colors.white,
+                                  ),
+                                );
+                              }
+                            }),
+                        const SizedBox(
+                          height: 32,
+                        ),
+                        Container(
+                          height: 60,
+                          decoration: const BoxDecoration(
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 25),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // Déposer
+                                _actionInCard(
+                                  "images/u_sync.svg",
+                                  "Déposer",
+                                ),
+                                // Transférer
+                                _actionInCard(
+                                  "images/u_exchange.svg",
+                                  "Transférer",
+                                ),
+                                // Rétirer
+                                _actionInCard(
+                                  "images/u_export.svg",
+                                  "Rétirer",
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    const Text(
-                      "Balance Total",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-                    FutureBuilder<Bankroll>(
-                        future: _bankroll,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          } else if (snapshot.hasError) {
-                            return Center(
-                              child: Text(
-                                "Error ${snapshot.error.toString()}",
-                                style: TextStyle(color: Colors.red[400]),
-                              ),
-                            );
-                          } else {
-                            final data = snapshot.data;
-                            return Text(
-                              '${data?.bank} Ar',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 40,
-                                color: Colors.white,
-                              ),
-                            );
-                          }
-                        }),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white30,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.arrow_downward,
-                                  size: 18,
-                                  color: Colors.greenAccent,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              const Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Income",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  Text(
-                                    "\$ 100.00",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white30,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.arrow_upward,
-                                  size: 18,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              const Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Expense",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  Text(
-                                    "\$ 400.00",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                    // Déposer
+                    _quickInfoOnTransaction(
+                        "Dépot", const Color.fromARGB(255, 74, 74, 74)),
+                    // Transférer
+                    _quickInfoOnTransaction(
+                        "Transfert", const Color(0xFF282828)),
+                    // Rétirer
+                    _quickInfoOnTransaction(
+                        "Retrait", const Color.fromARGB(255, 74, 74, 74)),
                   ],
                 ),
               ),
               const SizedBox(
-                height: 40,
+                height: 32,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    "Transactions",
+                    "Transactions récentes",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      fontFamily: "Roboto",
+                      fontSize: 16,
                     ),
                   ),
                   TextButton(
@@ -222,7 +230,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text(
                       "Voir Tous",
                       style: TextStyle(
-                        fontWeight: FontWeight.w600,
                         color: Colors.grey.shade500,
                       ),
                     ),
@@ -230,83 +237,178 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               const SizedBox(
-                height: 20,
+                height: 5,
               ),
               Expanded(
                 child: ListView.builder(
-                    itemCount: 6,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {},
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
+                  itemCount: 6,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {},
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color:
+                                Provider.of<ThemeProvider>(context).isDarkMode
+                                    ? Theme.of(context).colorScheme.tertiary
+                                    : const Color(0xFFF2F2F2),
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(50),
+                              bottomLeft: Radius.circular(50),
+                              bottomRight: Radius.circular(50),
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 50,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey.shade100,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Icon(
-                                          Icons.eco_sharp,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                right: 15, left: 5, top: 5, bottom: 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 50,
+                                      height: 50,
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFF282828),
+                                        shape: BoxShape.circle,
                                       ),
-                                      const SizedBox(
-                                        width: 12,
+                                      child: const Icon(
+                                        Iconsax.icon,
+                                        color: Colors.white,
                                       ),
-                                      const Text(
-                                        "Cave",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: "roboto"),
+                                    ),
+                                    const SizedBox(
+                                      width: 12,
+                                    ),
+                                    const Text(
+                                      "Cave",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
                                       ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      const Text(
-                                        "\$ 10.00",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    const Text(
+                                      "\$ 10.00",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      Text(
-                                        "Aujourd'hui",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.grey.shade500,
-                                        ),
+                                    ),
+                                    Text(
+                                      "Aujourd'hui",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey.shade500,
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                      );
-                    }),
+                      ),
+                    );
+                  },
+                ),
               )
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _actionInCard(String svgPath, String text) {
+    return GestureDetector(
+      onTap: () {},
+      child: Column(
+        children: [
+          SvgPicture.asset(
+            svgPath,
+          ),
+          const SizedBox(height: 2),
+          Text(
+            text,
+            style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _quickInfoOnTransaction(String text, Color color) {
+    return Container(
+      width: 95,
+      height: 96,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: const BorderRadius.all(
+          Radius.circular(5),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Column(
+          children: [
+            Text(
+              text,
+              style: const TextStyle(fontSize: 14, color: Colors.white),
+            ),
+            const Text(
+              "5",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: Colors.white),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      "images/u_check-circle.svg",
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    const Text(
+                      "1",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      "images/u_check-circle.svg",
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    const Text(
+                      "1",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
