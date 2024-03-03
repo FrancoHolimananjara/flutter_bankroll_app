@@ -7,13 +7,14 @@ class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _RegisterScreenState createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   final AuthService _authService = AuthService();
@@ -219,7 +220,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         TextFormField(
                           controller: _passwordController,
-                          obscureText: showPassword,
+                          obscureText: !showPassword,
                           validator: _validatePassword,
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Iconsax.password_check),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+// ignore: must_be_immutable
 class OtpVerificationScreen extends StatefulWidget {
   String userId, email;
 
@@ -13,11 +14,11 @@ class OtpVerificationScreen extends StatefulWidget {
 }
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
-  AuthService _authService = AuthService();
-  late String otp;
+  final AuthService _authService = AuthService();
+  final Map<String, dynamic> formData = {};
 
-  void verifyOtpCode(String id, String theOpt) {
-    _authService.verifyOtp(context: context, id: id, otp: theOpt);
+  void verifyOtpCode(String id, Map<String, dynamic> formData) {
+    _authService.verifyOtp(context: context, id: id, formData: formData);
   }
 
   @override
@@ -72,15 +73,15 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   }
 
   Widget _otpFormUi(String id) {
-    Color accentPurpleColor = Color(0xFF6A53A1);
-    Color accentPinkColor = Color(0xFFF99BBD);
-    Color accentDarkGreenColor = Color(0xFF115C49);
-    Color accentYellowColor = Color(0xFFFFB612);
-    Color accentOrangeColor = Color(0xFFEA7A3B);
+    Color accentPurpleColor = const Color(0xFF6A53A1);
+    Color accentPinkColor = const Color(0xFFF99BBD);
+    Color accentDarkGreenColor = const Color(0xFF115C49);
+    Color accentYellowColor = const Color(0xFFFFB612);
+    Color accentOrangeColor = const Color(0xFFEA7A3B);
 
     TextStyle? createStyle(Color color) {
       ThemeData theme = Theme.of(context);
-      return theme.textTheme.headline3?.copyWith(color: color);
+      return theme.textTheme.displaySmall?.copyWith(color: color);
     }
 
     var otpTextStyles = [
@@ -109,9 +110,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           //runs when every textfield is filled
           onSubmit: (String verificationCode) {
             setState(() {
-              otp = verificationCode;
+              formData['otp'] = verificationCode;
             });
-            verifyOtpCode(id, otp);
+            verifyOtpCode(id, formData);
             // showDialog(
             //   context: context,
             //   builder: (context) {

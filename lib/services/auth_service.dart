@@ -34,7 +34,6 @@ class AuthService {
                 jsonDecode(res.body)['message']);
             final userId = jsonDecode(res.body)['data']['userId'];
             final email = jsonDecode(res.body)['data']['email'];
-            print("$userId, $email");
             navigator.pushAndRemoveUntil(
                 MaterialPageRoute(
                     builder: (context) => OtpVerificationScreen(
@@ -74,7 +73,7 @@ class AuthService {
             jsonDecode(res.body)['token'],
           );
           navigator.pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => NavigationMenu()),
+              MaterialPageRoute(builder: (context) => const NavigationMenu()),
               (route) => false);
         },
       );
@@ -87,12 +86,12 @@ class AuthService {
   void verifyOtp(
       {required BuildContext context,
       required String id,
-      required String otp}) async {
+      required Map<String, dynamic> formData}) async {
     try {
       final navigator = Navigator.of(context);
       http.Response res = await http.post(
         Uri.parse("${Constant.uri}/auth/verify/$id"),
-        body: jsonEncode(otp),
+        body: jsonEncode(formData),
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
@@ -102,8 +101,8 @@ class AuthService {
         response: res,
         context: context,
         onSuccess: () async {
-          // showSnackBar(context, jsonDecode(res.body)['success'],
-          //     jsonDecode(res.body)['message']);
+          showSnackBar(context, jsonDecode(res.body)['success'],
+              jsonDecode(res.body)['message']);
           navigator.pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => const LoginScreen()),
               (route) => false);

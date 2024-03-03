@@ -290,7 +290,6 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                         : 0;
                     formData['place'] = _placeController.text;
                   });
-                  print(formData);
                   onAddNewSession();
                 }
               },

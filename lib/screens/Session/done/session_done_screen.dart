@@ -10,12 +10,11 @@ class SessionDoneScreen extends StatefulWidget {
 }
 
 class _SessionDoneScreenState extends State<SessionDoneScreen> {
-  SessionService _sessionService = SessionService();
+  final SessionService _sessionService = SessionService();
   late Future<List<Session>> _futureSession;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _futureSession = _sessionService.getSession(false);
   }

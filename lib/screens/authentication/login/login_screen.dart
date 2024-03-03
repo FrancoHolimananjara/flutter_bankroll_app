@@ -7,12 +7,13 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   final AuthService _authService = AuthService();
@@ -124,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             TextFormField(
               controller: _passwordController,
-              obscureText: showPassword,
+              obscureText: !showPassword,
               validator: _validatePassword,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Iconsax.password_check),
@@ -177,7 +178,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     formData['username'] = _usernameController.text;
                     formData['password'] = _passwordController.text;
                   });
-                  print(formData);
                   onSignIn();
                 }
               },

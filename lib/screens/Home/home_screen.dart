@@ -18,7 +18,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _bankroll = _bankrollService.getBankroll();
   }
@@ -40,8 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
               accountName: Text(user.username),
               accountEmail: Text(user.email),
             ),
-            Text("Home"),
-            Text("Home"),
+            const Text("Home"),
+            const Text("Home"),
             const Spacer(),
             ElevatedButton(
               onPressed: () {

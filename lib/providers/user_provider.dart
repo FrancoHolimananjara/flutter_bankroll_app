@@ -2,7 +2,7 @@ import 'package:bankroll_app/services/user_service.dart';
 import 'package:flutter/material.dart';
 
 class UserProvider extends ChangeNotifier {
-  User _user = User(
+  User _user = const User(
       token: '',
       id: '',
       email: '',
