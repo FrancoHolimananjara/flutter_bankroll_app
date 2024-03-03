@@ -257,7 +257,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 formData['email'] = _emailController.text;
                                 formData['password'] = _passwordController.text;
                               });
-                              print(formData);
                               onRegister();
                             }
                           },

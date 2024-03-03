@@ -1,15 +1,25 @@
+import 'package:bankroll_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
-  const OtpVerificationScreen({super.key});
+  String userId, email;
+
+  OtpVerificationScreen({super.key, required this.userId, required this.email});
 
   @override
   State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
 }
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
+  AuthService _authService = AuthService();
+  late String otp;
+
+  void verifyOtpCode(String id, String theOpt) {
+    _authService.verifyOtp(context: context, id: id, otp: theOpt);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,9 +31,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             child: Column(
               children: [
                 // Logo, Title and Subtitle
-                _header(),
+                _header(widget.email),
                 // Form
-                _otpFormUi()
+                _otpFormUi(widget.userId)
               ],
             ),
           ),
@@ -32,7 +42,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     );
   }
 
-  Widget _header() {
+  Widget _header(String email) {
     return Column(
       children: [
         SvgPicture.asset("images/forOtp.svg"),
@@ -51,7 +61,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           height: 8.0,
         ),
         Text(
-          "To add the geolocator to your Flutter application read the useremail@gmail.com instructions. ",
+          "To add the geolocator to your Flutter application read the $email instructions. ",
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Theme.of(context).colorScheme.inversePrimary,
@@ -61,7 +71,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     );
   }
 
-  Widget _otpFormUi() {
+  Widget _otpFormUi(String id) {
     Color accentPurpleColor = Color(0xFF6A53A1);
     Color accentPinkColor = Color(0xFFF99BBD);
     Color accentDarkGreenColor = Color(0xFF115C49);
@@ -98,16 +108,19 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
           //runs when every textfield is filled
           onSubmit: (String verificationCode) {
-            print(verificationCode);
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text("Verification Code"),
-                  content: Text('Code entered is $verificationCode'),
-                );
-              },
-            );
+            setState(() {
+              otp = verificationCode;
+            });
+            verifyOtpCode(id, otp);
+            // showDialog(
+            //   context: context,
+            //   builder: (context) {
+            //     return AlertDialog(
+            //       title: Text("Verification Code"),
+            //       content: Text('Code entered is $verificationCode'),
+            //     );
+            //   },
+            // );
           }, // end onSubmit
         ),
         const SizedBox(

@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:bankroll_app/providers/user_provider.dart';
+import 'package:bankroll_app/screens/authentication/login/login_screen.dart';
+import 'package:bankroll_app/screens/authentication/otp/otp_verification_screen.dart';
 import 'package:bankroll_app/utils/constant.dart';
 import 'package:bankroll_app/utils/httpErrorHandler.dart';
 import 'package:bankroll_app/utils/navigation_menu.dart';
@@ -15,6 +17,7 @@ class AuthService {
       {required BuildContext context,
       required Map<String, dynamic> formData}) async {
     try {
+      final navigator = Navigator.of(context);
       http.Response res = await http.post(
         Uri.parse("${Constant.uri}/auth/register"),
         body: jsonEncode(formData),
@@ -29,6 +32,16 @@ class AuthService {
           onSuccess: () {
             showSnackBar(context, jsonDecode(res.body)['success'],
                 jsonDecode(res.body)['message']);
+            final userId = jsonDecode(res.body)['data']['userId'];
+            final email = jsonDecode(res.body)['data']['email'];
+            print("$userId, $email");
+            navigator.pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) => OtpVerificationScreen(
+                          userId: userId,
+                          email: email,
+                        )),
+                (route) => false);
           });
     } catch (e) {
       // ignore: use_build_context_synchronously
@@ -62,6 +75,37 @@ class AuthService {
           );
           navigator.pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => NavigationMenu()),
+              (route) => false);
+        },
+      );
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      showSnackBar(context, false, e.toString());
+    }
+  }
+
+  void verifyOtp(
+      {required BuildContext context,
+      required String id,
+      required String otp}) async {
+    try {
+      final navigator = Navigator.of(context);
+      http.Response res = await http.post(
+        Uri.parse("${Constant.uri}/auth/verify/$id"),
+        body: jsonEncode(otp),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+      );
+      // ignore: use_build_context_synchronously
+      httpErrorHandler(
+        response: res,
+        context: context,
+        onSuccess: () async {
+          // showSnackBar(context, jsonDecode(res.body)['success'],
+          //     jsonDecode(res.body)['message']);
+          navigator.pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
               (route) => false);
         },
       );
