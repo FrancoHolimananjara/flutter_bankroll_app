@@ -44,7 +44,7 @@ String sessionToJson(Session data) => json.encode(data.toJson());
 class Session {
   String id;
   DateTime start;
-  DateTime end;
+  DateTime? end;
   bool inprogress;
   int buyin;
   int buyout;
@@ -54,7 +54,7 @@ class Session {
   Session({
     required this.id,
     required this.start,
-    required this.end,
+    this.end,
     required this.inprogress,
     required this.buyin,
     required this.buyout,
@@ -65,7 +65,7 @@ class Session {
   factory Session.fromJson(Map<String, dynamic> json) => Session(
         id: json["_id"],
         start: DateTime.parse(json["start"]),
-        end: DateTime.parse(json["end"]),
+        end: DateTime.parse(json["end"] ?? json["start"]),
         inprogress: json["inprogress"],
         buyin: json["buyin"],
         buyout: json["buyout"],
@@ -76,7 +76,7 @@ class Session {
   Map<String, dynamic> toJson() => {
         "_id": id,
         "start": start.toIso8601String(),
-        "end": end.toIso8601String(),
+        "end": end?.toIso8601String(),
         "inprogress": inprogress,
         "buyin": buyin,
         "buyout": buyout,

@@ -80,6 +80,7 @@ class AuthService {
     } catch (e) {
       // ignore: use_build_context_synchronously
       showSnackBar(context, false, e.toString());
+      print(e.toString());
     }
   }
 

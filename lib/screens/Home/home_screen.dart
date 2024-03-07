@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:bankroll_app/providers/theme_provider.dart';
 import 'package:bankroll_app/providers/user_provider.dart';
 import 'package:bankroll_app/services/bank_service.dart';
+import 'package:bankroll_app/services/transaction_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
@@ -17,12 +18,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final BankrollService _bankrollService = BankrollService();
+  final TransactionService _transactionService = TransactionService();
   late Future<Bankroll> _bankroll;
 
   @override
   void initState() {
     super.initState();
-    _bankroll = _bankrollService.getBankroll();
+    _bankrollService.getBankroll();
+    _transactionService.getAllTransactions();
   }
 
   @override
@@ -32,6 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: Drawer(
         backgroundColor: Theme.of(context).colorScheme.background,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             UserAccountsDrawerHeader(
               accountName: Text(user.username),
@@ -40,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const Text("Home"),
             const Text("Home"),
             const Spacer(),
-            ElevatedButton(
+            FilledButton(
               onPressed: () {
                 setState(() {
                   Provider.of<ThemeProvider>(context, listen: false)
@@ -56,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: Icon(Iconsax.moon,
                   color: Provider.of<ThemeProvider>(context).isDarkMode
-                      ? const Color.fromARGB(255, 57, 57, 57)
+                      ? Colors.white
                       : const Color.fromARGB(255, 57, 57, 57)),
             ),
           ],
@@ -64,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          padding: const EdgeInsets.only(left: 10, top: 5, right: 10),
           child: Column(
             children: [
               const SizedBox(
@@ -124,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         FutureBuilder<Bankroll>(
-                            future: _bankroll,
+                            future: _bankrollService.getBankroll(),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -140,8 +145,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 );
                               } else {
                                 final data = snapshot.data;
+                                var d = (data!.bank / 1000).abs();
                                 return Text(
-                                  '${data?.bank} Ar',
+                                  '$d K Ar',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 40,
@@ -151,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               }
                             }),
                         const SizedBox(
-                          height: 32,
+                          height: 40,
                         ),
                         Container(
                           height: 60,
@@ -240,84 +246,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 5,
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: 6,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {},
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color:
-                                Provider.of<ThemeProvider>(context).isDarkMode
-                                    ? Theme.of(context).colorScheme.tertiary
-                                    : const Color(0xFFF2F2F2),
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(50),
-                              bottomLeft: Radius.circular(50),
-                              bottomRight: Radius.circular(50),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                right: 15, left: 5, top: 5, bottom: 5),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 50,
-                                      height: 50,
-                                      decoration: const BoxDecoration(
-                                        color: Color(0xFF282828),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: const Icon(
-                                        Iconsax.icon,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 12,
-                                    ),
-                                    const Text(
-                                      "Cave",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    const Text(
-                                      "\$ 10.00",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Aujourd'hui",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.grey.shade500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                  child: FutureBuilder<List<Transaction>>(
+                future: _transactionService.getAllTransactions(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        "Error ${snapshot.error.toString()}",
+                        style: TextStyle(color: Colors.red[400]),
                       ),
                     );
-                  },
-                ),
-              )
+                  }
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      final transaction = snapshot.data![index];
+                      return _transactionTile(transaction);
+                    },
+                  );
+                },
+              )),
             ],
           ),
         ),
@@ -395,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   children: [
                     SvgPicture.asset(
-                      "images/u_check-circle.svg",
+                      "images/u_minus-circle.svg",
                     ),
                     const SizedBox(
                       width: 5,
@@ -409,6 +361,80 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _transactionTile(Transaction transaction) {
+    return GestureDetector(
+      onTap: () {},
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Provider.of<ThemeProvider>(context).isDarkMode
+                ? Theme.of(context).colorScheme.tertiary
+                : const Color(0xFFF2F2F2),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(50),
+              bottomLeft: Radius.circular(50),
+              bottomRight: Radius.circular(50),
+            ),
+          ),
+          child: Padding(
+            padding:
+                const EdgeInsets.only(right: 15, left: 5, top: 5, bottom: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF282828),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Iconsax.icon,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    Text(
+                      transaction.action,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      "${(transaction.amount / 1000)} K Ar",
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      "Il y a ${DateTime.now().difference(transaction.date).inMinutes} min",
+                      style: TextStyle(
+                        color: Colors.grey.shade500,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
