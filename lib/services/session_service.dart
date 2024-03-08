@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bankroll_app/services/bank_service.dart';
 import 'package:bankroll_app/utils/constant.dart';
 import 'package:bankroll_app/utils/httpErrorHandler.dart';
 import 'package:bankroll_app/utils/showSnackBar.dart';
@@ -90,9 +91,10 @@ class SessionService {
     required BuildContext context,
     required Map<String, dynamic> formData,
   }) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString("access-token");
+    BankrollService bankrollService = BankrollService();
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      var token = prefs.getString("access-token");
       http.Response res = await http.post(
         Uri.parse('${Constant.uri}/session'),
         body: jsonEncode(formData),
@@ -108,6 +110,7 @@ class SessionService {
         onSuccess: () {
           showSnackBar(context, jsonDecode(res.body)['success'],
               jsonDecode(res.body)['message']);
+          bankrollService.retrieveBankroll(context: context);
         },
       );
     } on Exception catch (e) {

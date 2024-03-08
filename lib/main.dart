@@ -1,3 +1,4 @@
+import 'package:bankroll_app/providers/bank_provider.dart';
 import 'package:bankroll_app/providers/theme_provider.dart';
 import 'package:bankroll_app/providers/user_provider.dart';
 import 'package:bankroll_app/screens/authentication/login/login_screen.dart';
@@ -9,6 +10,7 @@ void main() {
     providers: [
       ChangeNotifierProvider(create: (context) => ThemeProvider()),
       ChangeNotifierProvider(create: (context) => UserProvider()),
+      ChangeNotifierProvider(create: (context) => BankProvider()),
     ],
     child: const MyApp(),
   ));

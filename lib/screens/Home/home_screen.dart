@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bankroll_app/providers/bank_provider.dart';
 import 'package:bankroll_app/providers/theme_provider.dart';
 import 'package:bankroll_app/providers/user_provider.dart';
 import 'package:bankroll_app/services/bank_service.dart';
@@ -19,18 +20,19 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final BankrollService _bankrollService = BankrollService();
   final TransactionService _transactionService = TransactionService();
-  late Future<Bankroll> _bankroll;
 
   @override
   void initState() {
     super.initState();
     _bankrollService.getBankroll();
+    _bankrollService.retrieveBankroll(context: context);
     _transactionService.getAllTransactions();
   }
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
+    final bankroll = Provider.of<BankProvider>(context).bank;
     return Scaffold(
       drawer: Drawer(
         backgroundColor: Theme.of(context).colorScheme.background,
@@ -144,10 +146,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 );
                               } else {
-                                final data = snapshot.data;
-                                var d = (data!.bank / 1000).abs();
+                                var bank = bankroll.bank;
+                                var bankStyle = (bank / 1000).abs();
                                 return Text(
-                                  '$d K Ar',
+                                  '$bankStyle K Ar',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 40,

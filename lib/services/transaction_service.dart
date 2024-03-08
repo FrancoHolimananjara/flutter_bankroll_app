@@ -4,7 +4,11 @@
 
 import 'dart:convert';
 
+import 'package:bankroll_app/services/bank_service.dart';
 import 'package:bankroll_app/utils/constant.dart';
+import 'package:bankroll_app/utils/httpErrorHandler.dart';
+import 'package:bankroll_app/utils/showSnackBar.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -54,6 +58,38 @@ class Transaction {
 }
 
 class TransactionService {
+  void addTransaction(
+      {required BuildContext context,
+      required Map<String, dynamic> formData}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString("access-token");
+    BankrollService bankrollService = BankrollService();
+    try {
+      http.Response res = await http.post(
+        Uri.parse('${Constant.uri}/transaction'),
+        body: jsonEncode(formData),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      // ignore: use_build_context_synchronously
+      httpErrorHandler(
+        response: res,
+        context: context,
+        onSuccess: () {
+          // showSnackBar(context, jsonDecode(res.body)['success'],
+          //     jsonDecode(res.body)['message']);
+          print(jsonDecode(res.body)['response']);
+          bankrollService.getBankroll();
+        },
+      );
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      showSnackBar(context, false, e.toString());
+    }
+  }
+
   Future<List<Transaction>> getAllTransactions() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("access-token");

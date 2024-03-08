@@ -1,6 +1,8 @@
+import 'package:bankroll_app/providers/theme_provider.dart';
 import 'package:bankroll_app/services/session_service.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
 
 class SessionStartScreen extends StatefulWidget {
   const SessionStartScreen({super.key});
@@ -151,7 +153,7 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ElevatedButton(
+                FilledButton(
                   onPressed: () {
                     setState(() {
                       _inprogressSession = !_inprogressSession;
@@ -279,8 +281,8 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                   // Vous pouvez soumettre le formulaire ici.
                   setState(() {
                     formData['start'] = _inprogressSession
-                        ? DateTime.now().toString()
-                        : myDate['start'].toString();
+                        ? DateTime.now().toUtc().toString()
+                        : myDate['start']?.toUtc().toString();
                     formData['end'] =
                         _inprogressSession ? null : myDate['end'].toString();
                     formData['inprogress'] = _inprogressSession;
@@ -291,13 +293,22 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                     formData['place'] = _placeController.text;
                   });
                   onAddNewSession();
+                  setState(() {
+                    _buyinController.clear();
+                    _buyoutController.clear();
+                    _placeController.clear();
+                    _endDateController.clear();
+                    _startDateController.clear();
+                  });
                 }
               },
               child: Container(
                 width: double.infinity,
                 height: MediaQuery.of(context).size.width / 7,
                 decoration: BoxDecoration(
-                    color: const Color(0xFF642CFF),
+                    color: Provider.of<ThemeProvider>(context).isDarkMode
+                        ? const Color(0xFF642CFF)
+                        : const Color(0xFF282828),
                     borderRadius: BorderRadius.circular(10)),
                 child: Center(
                   child: Text(

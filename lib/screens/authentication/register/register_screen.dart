@@ -1,7 +1,9 @@
+import 'package:bankroll_app/providers/theme_provider.dart';
 import 'package:bankroll_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -75,7 +77,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 // Logo, Title and Subtitle
                 Column(
                   children: [
-                    SvgPicture.asset("images/logo.svg"),
+                    SvgPicture.asset(
+                      Provider.of<ThemeProvider>(context).isDarkMode
+                          ? "images/fi_crosshair_whitelogo"
+                          : "images/logo.svg",
+                    ),
                     const SizedBox(
                       height: 16,
                     ),
@@ -182,7 +188,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             width: double.infinity,
                             height: MediaQuery.of(context).size.width / 7,
                             decoration: BoxDecoration(
-                                color: const Color(0xFF282828),
+                                color: Provider.of<ThemeProvider>(context)
+                                        .isDarkMode
+                                    ? const Color(0xFF642CFF)
+                                    : const Color(0xFF282828),
                                 borderRadius: BorderRadius.circular(10)),
                             child: const Center(
                               child: Text(

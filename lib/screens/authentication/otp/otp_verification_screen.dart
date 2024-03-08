@@ -1,7 +1,9 @@
+import 'package:bankroll_app/providers/theme_provider.dart';
 import 'package:bankroll_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class OtpVerificationScreen extends StatefulWidget {
@@ -133,7 +135,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             width: double.infinity,
             height: MediaQuery.of(context).size.width / 7,
             decoration: BoxDecoration(
-                color: const Color(0xFF282828),
+                color: Provider.of<ThemeProvider>(context).isDarkMode
+                    ? const Color(0xFF642CFF)
+                    : const Color(0xFF282828),
                 borderRadius: BorderRadius.circular(10)),
             child: const Center(
               child: Text(
